@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sports Tournament Management System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial;
+            background-color: #f4f6fb;
+            color: #222;
+        }
+
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background-color: #171c70;
+            color: white;
+            position: fixed;
+            padding: 20px 12px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .nav-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 7px;
+            background: none;
+            border: none;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .nav-button:hover,
+        .nav-button.active {
+            background-color: #3979ed;
+        }
+
+        .main {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        .topbar {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .topbar h2 {
+            margin: 0;
+            color: #171c70;
+            font-size: 20px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .welcome,
+        .panel {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .welcome h1,
+        .panel h3 {
+            color: #171c70;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 22px 10px;
+            border: 1px solid #e1e7f3;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            background-color: #eaf1ff;
+        }
+
+        .card h3 {
+            font-size: 14px;
+            color: #171c70;
+        }
+
+        .form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #d5d9e3;
+            border-radius: 5px;
+            min-width: 100px;
+            flex: 1;
+        }
+
+        .btn {
+            padding: 9px 13px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 2px;
+        }
+
+        .blue {
+            background-color: #3979ed;
+            color: white;
+        }
+
+        .purple {
+            background-color: #e8ddff;
+            color: #483080;
+        }
+
+        .red {
+            background-color: #ffdddd;
+            color: #c82333;
+        }
+
+        .table-box {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f4fb;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 15px;
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 155px;
+            }
+
+            .main {
+                margin-left: 155px;
+                padding: 10px;
+            }
+
+            .nav-button {
+                font-size: 11px;
+                padding: 9px 5px;
+            }
+
+            .logo {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="logo">
+            SPORTS TOURNAMENT
+            <br>
+            MANAGEMENT SYSTEM
+        </div>
+
+        <button class="nav-button active" onclick="showPage('dashboard', this)">Dashboard</button>
+        <button class="nav-button" onclick="showPage('teams', this)">Manage Teams</button>
+        <button class="nav-button" onclick="showPage('players', this)">Manage Players</button>
+        <button class="nav-button" onclick="showPage('sports', this)">Sports Categories</button>
+        <button class="nav-button" onclick="showPage('schedules', this)">Manage Schedules</button>
+        <button class="nav-button" onclick="showPage('scores', this)">Manage Scores</button>
+        <button class="nav-button" onclick="showPage('standings', this)">Manage Standings</button>
+        <button class="nav-button" onclick="showPage('results', this)">Tournament Results</button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+        <div class="topbar">
+            <h2 id="pageTitle">Dashboard</h2>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div class="page active" id="dashboard">
+            <div class="welcome">
+                <h1>Sports Tournament Management System</h1>
+                <p>Manage your tournament easily and efficiently!</p>
+            </div>
+
+            <div class="cards">
+                <div class="card" onclick="openModule('teams')"><h3>Manage Teams</h3></div>
+                <div class="card" onclick="openModule('players')"><h3>Manage Players</h3></div>
+                <div class="card" onclick="openModule('sports')"><h3>Sports Categories</h3></div>
+                <div class="card" onclick="openModule('schedules')"><h3>Manage Schedules</h3></div>
+                <div class="card" onclick="openModule('scores')"><h3>Manage Scores</h3></div>
+                <div class="card" onclick="openModule('standings')"><h3>Manage Standings</h3></div>
+                <div class="card" onclick="openModule('results')"><h3>Tournament Results</h3></div>
+            </div>
+        </div>
+
+        <!-- MANAGE TEAMS -->
+        <div class="page" id="teams">
+            <div class="panel">
+                <h3>Manage Teams</h3>
+                <div class="form">
+                    <input id="teams_name" placeholder="Team Name">
+                    <input id="teams_sports" placeholder="Sports">
+                    <input id="teams_coach" placeholder="Coach">
+                </div>
+                <button class="btn blue" onclick="addRecord('teams')">Add Team</button>
+            </div>
+            <div class="panel">
+                <h3>Teams List</h3>
+                <div id="teamsTable" class="table-box"></div>
+                <br>
+                <input type="number" id="teamsIndex" placeholder="Enter index to delete">
+                <button class="btn red" onclick="deleteRecordByIndex('teams')">Delete by Index</button>
+            </div>
+        </div>
+
+        <!-- MANAGE PLAYERS -->
+        <div class="page" id="players">
+            <div class="panel">
+                <h3>Manage Players</h3>
+                <div class="form">
+                    <input id="players_name" placeholder="Player Name">
+                    <input id="players_team" placeholder="Team">
+                    <input id="players_position" placeholder="Position">
+                </div>
+                <button class="btn blue" onclick="addRecord('players')">Add Player</button>
+            </div>
+            <div class="panel">
+                <h3>Players List</h3>
+                <div id="playersTable" class="table-box"></div>
+                <br>
+                <input type="number" id="playersIndex" placeholder="Enter index to delete">
+                <button class="btn red" onclick="deleteRecordByIndex('players')">Delete by Index</button>
+            </div>
+        </div>
+
+        <!-- SPORTS CATEGORIES -->
+        <div class="page" id="sports">
+            <div class="panel">
+                <h3>Sports Categories</h3>
+                <div class="form">
+                    <input id="sports_category" placeholder="Category Name">
+                    <input id="sports_description" placeholder="Description">
+                </div>
+                <button class="btn blue" onclick="addRecord('sports')">Add Sport</button>
+            </div>
+            <div class="panel">
+                <h3>Sports List</h3>
+                <div id="sportsTable" class="table-box"></div>
+                <br>
+                <input type="number" id="sportsIndex" placeholder="Enter index to delete">
+                <button class="btn red" onclick="deleteRecordByIndex('sports')">Delete by Index</button>
+            </div>
+        </div>
+
+        <!-- MANAGE SCHEDULES -->
+        <div class="page" id="schedules">
+            <div class="panel">
+                <h3>Manage Schedules</h3>
+                <div class="form">
+                    <input id="schedules_match" placeholder="Match Name">
+                    <input id="schedules_sport" placeholder="Sport Category">
+                    <input id="schedules_teams" placeholder="Teams (Team A vs Team B)">
+                    <input id="schedules_date" type="date" aria-label="Match Date">
+                    <input id="schedules_venue" placeholder="Venue">
+                </div>
+                <button class="btn blue" onclick="addRecord('schedules')">Add Schedule</button>
+            </div>
+            <div class="panel">
+                <h3>Schedules List</h3>
+                <div id="schedulesTable" class="table-box"></div>
+                <br>
+                <input type="number" id="schedulesIndex" placeholder="Enter index to delete">
+                <button class="btn red" onclick="deleteRecordByIndex('schedules')">Delete by Index</button>
+            </div>
+        </div>
+
+        <!-- MANAGE SCORES -->
+        <div class="page" id="scores">
+            <div class="panel">
+                <h3>Manage Scores</h3>
+                <div class="form">
+                    <input id="scores_match" placeholder="Match Name">
+                    <input id="scores_team1" placeholder="Team 1">
+                    <input id="scores_score1" type="number" min="0" placeholder="Team 1 Score">
+                    <input id="scores_team2" placeholder="Team Name">
+                    <input id="scores_score2" type="number" min="0" placeholder="Team Name Score">
+                </div>
+                <button class="btn blue" onclick="addRecord('scores')">Add Score</button>
+            </div>
+            <div class="panel">
+                <h3>Scores List</h3>
+                <div id="scoresTable" class="table-box"></div>
+                <br>
+                <input type="number" id="scoresIndex" placeholder="Enter index to delete">
+                <button class="btn red" onclick="deleteRecordByIndex('scores')">Delete by Index</button>
+            </div>
+        </div>
+
+        <!-- MANAGE STANDINGS -->
+        <div class="page" id="standings">
+            <div class="panel">
+                <h3>Manage Standings</h3>
+                <div class="form">
+                    <input id="standings_team" placeholder="Team Name">
+                    <input id="standings_played" type="number" min="0" placeholder="Games Played">
+                    <input id="standings_wins" type="number" min="0" placeholder="Wins">
+                    <input id="standings_losses" type="number" min="0" placeholder="Losses">
+                    <input id="standings_points" type="number" min="0" placeholder="Points">
+                </div>
+                <button class="btn blue" onclick="addRecord('standings')">Add Standing</button>
+            </div>
+            <div class="panel">
+                <h3>Standings List</h3>
+                <div id="standingsTable" class="table-box"></div>
+                <br>
+                <input type="number" id="standingsIndex" placeholder="Enter index to delete">
+                <button class="btn red" onclick="deleteRecordByIndex('standings')">Delete by Index</button>
+            </div>
+        </div>
+
+        <!-- TOURNAMENT RESULTS -->
+        <div class="page" id="results">
+            <div class="panel">
+                <h3>Tournament Results</h3>
+                <div class="form">
+                    <input id="results_tournament" placeholder="Tournament Name">
+                    <input id="results_winner" placeholder="Winning Team">
+                    <input id="results_runnerup" placeholder="Runner-up Team">
+                    <input id="results_award" placeholder="Award / Result">
+                </div>
+                <button class="btn blue" onclick="addRecord('results')">Add Result</button>
+            </div>
+            <div class="panel">
+                <h3>Tournament Results List</h3>
+                <div id="resultsTable" class="table-box"></div>
+                <br>
+                <input type="number" id="resultsIndex" placeholder="Enter index to delete">
+                <button class="btn red" onclick="deleteRecordByIndex('results')">Delete by Index</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // ARRAYS
+        let teams = [];
+        let players = [];
+        let sports = [];
+        let schedules = [];
+        let scores = [];
+        let standings = [];
+        let results = [];
+
+        // FIELD NAMES FOR EACH MODULE
+        const moduleFields = {
+            teams: ["name", "sports", "coach"],
+            players: ["name", "team", "position"],
+            sports: ["category", "description"],
+            schedules: ["match", "sport", "teams", "date", "venue"],
+            scores: ["match", "team1", "score1", "team2", "score2"],
+            standings: ["team", "played", "wins", "losses", "points"],
+            results: ["tournament", "winner", "runnerup", "award"]
+        };
+
+        // GET ARRAY
+        function getArray(module) {
+            if (module == "teams") return teams;
+            if (module == "players") return players;
+            if (module == "sports") return sports;
+            if (module == "schedules") return schedules;
+            if (module == "scores") return scores;
+            if (module == "standings") return standings;
+            return results;
+        }
+
+        // SAVE DATA AS JSON
+        function saveData() {
+            let data = {
+                teams: teams,
+                players: players,
+                sports: sports,
+                schedules: schedules,
+                scores: scores,
+                standings: standings,
+                results: results
+            };
+
+            localStorage.setItem("tournamentData", JSON.stringify(data));
+        }
+
+        // LOAD SAVED DATA
+        function loadData() {
+            let data = localStorage.getItem("tournamentData");
+
+            if (data != null) {
+                try {
+                    data = JSON.parse(data);
+
+                    teams = data.teams || [];
+                    players = data.players || [];
+                    sports = data.sports || [];
+                    schedules = data.schedules || [];
+                    scores = data.scores || [];
+                    standings = data.standings || [];
+                    results = data.results || [];
+                } catch (error) {
+                    alert("Saved data could not be loaded.");
+                }
+            }
+        }
+
+        // ADD RECORD
+        function addRecord(module) {
+            let fields = moduleFields[module];
+            let item = {};
+
+            for (let i = 0; i < fields.length; i++) {
+                let field = fields[i];
+                let input = document.getElementById(module + "_" + field);
+                let value = input.value.trim();
+
+                if (value == "") {
+                    alert("Please fill in all fields.");
+                    return;
+                }
+
+                if (["score1", "score2", "played", "wins", "losses", "points"].includes(field)) {
+                    if (isNaN(value) || Number(value) < 0) {
+                        alert("Please enter a valid number.");
+                        return;
+                    }
+
+                    value = Number(value);
+                }
+
+                item[field] = value;
+            }
+
+            getArray(module).push(item);
+            saveData();
+            displayRecords(module);
+
+            for (let i = 0; i < fields.length; i++) {
+                document.getElementById(module + "_" + fields[i]).value = "";
+            }
+
+            alert("Record added successfully!");
+        }
+
+        // DISPLAY RECORDS
+        function displayRecords(module) {
+            let items = getArray(module);
+            let fields = moduleFields[module];
+            let output = "";
+
+            if (items.length == 0) {
+                output = "<p class='empty'>No records yet.</p>";
+            } else {
+                output = "<table><tr><th>ID</th>";
+
+                for (let i = 0; i < fields.length; i++) {
+                    output += "<th>" + fields[i].toUpperCase() + "</th>";
+                }
+
+                output += "<th>ACTIONS</th></tr>";
+
+                for (let i = 0; i < items.length; i++) {
+                    output += "<tr>";
+                    output += "<td>" + (i + 1) + "</td>";
+
+                    for (let j = 0; j < fields.length; j++) {
+                        let value = String(items[i][fields[j]] ?? "");
+                        value = value.replace(/&/g, "&amp;")
+                                     .replace(/</g, "&lt;")
+                                     .replace(/>/g, "&gt;")
+                                     .replace(/"/g, "&quot;")
+                                     .replace(/'/g, "&#39;");
+                        output += "<td>" + value + "</td>";
+                    }
+
+                    output += "<td>";
+                    output += "<button class='btn purple' onclick=\"editRecord('" + module + "'," + i + ")\">Edit</button>";
+                    output += "<button class='btn red' onclick=\"deleteRecord('" + module + "'," + i + ")\">Delete</button>";
+                    output += "</td></tr>";
+                }
+
+                output += "</table>";
+            }
+
+            document.getElementById(module + "Table").innerHTML = output;
+        }
+
+        // EDIT RECORD
+        function editRecord(module, index) {
+            if (!confirm("Do you want to edit this record?")) {
+                return;
+            }
+
+            let items = getArray(module);
+            let fields = moduleFields[module];
+            let updated = {};
+
+            for (let i = 0; i < fields.length; i++) {
+                let field = fields[i];
+                let value = prompt("Enter " + field + ":", items[index][field]);
+
+                if (value == null || value.trim() == "") {
+                    alert("Edit cancelled or field is empty.");
+                    return;
+                }
+
+                if (["score1", "score2", "played", "wins", "losses", "points"].includes(field)) {
+                    if (isNaN(value) || Number(value) < 0) {
+                        alert("Please enter a valid number.");
+                        return;
+                    }
+
+                    value = Number(value);
+                }
+
+                updated[field] = value;
+            }
+
+            items[index] = updated;
+            saveData();
+            displayRecords(module);
+            alert("Record updated successfully!");
+        }
+
+        // DELETE RECORD
+        function deleteRecord(module, index) {
+            if (confirm("Are you sure you want to delete this record?")) {
+                getArray(module).splice(index, 1);
+                saveData();
+                displayRecords(module);
+                alert("Record deleted!");
+            }
+        }
+
+        // DELETE RECORD BY INDEX
+        function deleteRecordByIndex(module) {
+            let input = document.getElementById(module + "Index");
+            let number = Number(input.value);
+            let items = getArray(module);
+
+            if (input.value == "" || !Number.isInteger(number) ||
+                number < 1 || number > items.length) {
+                alert("Please enter a valid index.");
+                return;
+            }
+
+            if (confirm("Delete record number " + number + "?")) {
+                items.splice(number - 1, 1);
+                input.value = "";
+                saveData();
+                displayRecords(module);
+                alert("Record deleted!");
+            }
+        }
+
+        // SWITCH PAGES
+        function showPage(page, button) {
+            let pages = document.getElementsByClassName("page");
+
+            for (let i = 0; i < pages.length; i++) {
+                pages[i].classList.remove("active");
+            }
+
+            document.getElementById(page).classList.add("active");
+
+            let buttons = document.getElementsByClassName("nav-button");
+
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+
+            if (button != null) {
+                button.classList.add("active");
+            }
+
+            let titles = {
+                dashboard: "Dashboard",
+                teams: "Manage Teams",
+                players: "Manage Players",
+                sports: "Sports Categories",
+                schedules: "Manage Schedules",
+                scores: "Manage Scores",
+                standings: "Manage Standings",
+                results: "Tournament Results"
+            };
+
+            document.getElementById("pageTitle").textContent = titles[page];
+        }
+
+        // OPEN MODULE FROM DASHBOARD
+        function openModule(module) {
+            let buttons = document.getElementsByClassName("nav-button");
+
+            for (let i = 0; i < buttons.length; i++) {
+                if (buttons[i].getAttribute("onclick").includes("'" + module + "'")) {
+                    showPage(module, buttons[i]);
+                    return;
+                }
+            }
+        }
+
+        // LOAD AND DISPLAY ALL DATA
+        loadData();
+
+        displayRecords("teams");
+        displayRecords("players");
+        displayRecords("sports");
+        displayRecords("schedules");
+        displayRecords("scores");
+        displayRecords("standings");
+        displayRecords("results");
+    </script>
+</body>
+</html>
